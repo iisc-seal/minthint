@@ -1,0 +1,6 @@
+Replace Down_Separation <= ALIM() with Down_Separation < ALIM() and Retain Own_Tracked_Alt >= Other_Tracked_Alt and Remove Own_Tracked_Alt < Other_Tracked_Alt , .919151
+Replace Down_Separation <= ALIM() with Down_Separation == ALIM(), .919151
+Replace Down_Separation <= ALIM() with Down_Separation < ALIM(), .919151
+Retain Own_Tracked_Alt < Other_Tracked_Alt, 0.53654
+Replace Own_Tracked_Alt < Other_Tracked_Alt with Other_Tracked_Alt < Own_Tracked_Alt, 0.50149
+Retain (Own_Tracked_Alt >= Other_Tracked_Alt) || ((Own_Tracked_Alt < Other_Tracked_Alt) && (Down_Separation <= ALIM())), 0.41371
