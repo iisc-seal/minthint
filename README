@@ -1,0 +1,80 @@
+		MintHint README
+
+This directory contains the prototype implementation of MintHint. MintHint is a
+novel program repair tool. It generates repair hints for the developer, as
+opposed to finding a complete repair. See our ICSE'14 paper for details.
+
+Requirements (This prototype was tested with the following environment)
+------------
+* MATLAB R2012a
+* Java 1.7
+* Antlr 3.5.2 - download the complete jar from
+  http://www.antlr3.org/download.html. 
+  Note: this prototype is not compatible with antlr 4.
+* Guava 17.0 - download jar from https://code.google.com/p/guava-libraries/
+* A Linux environment that supports bash scripting.
+
+
+Run MintHint
+------------
+This prototype implements the statistical analysis and hint generation part of
+MintHint. Fault Localization and derivation of the state transformer from the
+test suite is to be done offline. This prototype generates the repair hints for
+a single statement. It requires the following input files:
+	- a csv file recording the data obtained from state transformer. In
+	  other words, this file records the values of expressions from the
+	  repair space (including the LHS variable). Each column is an
+	  expression and each row is a run of the program.
+	- attrmap:- list of expressions in the repair space. Each line in this file is a
+	  candidate expression from the repair space. Note that this list must
+	  also include subexpressions from the faulty RHS as well as the faulty
+	  RHS itself. (See example/attrmap.75). Each line in this file is
+	  formatted as "linenumber: expression".
+	- rhsfile: list of subexpressions in the faulty RHS. This list needs to record
+	  the line numbers of these expressions in the attrmap file. Make sure to
+	  put the complete faulty RHS as the first expression in this file.
+	- typefile: type declarations for all variables used in the repair
+	  space. (See example/type.75). All declarations needs to end in ';'
+
+Let us run the example program in "example" folder. You can find the following
+files in this folder:
+	- tcas.c : the source code of the program. Line 75 has the fault.
+	- v75.complete.csv: the csv file
+	- attrmap.75: expressions in the repair space
+	- rhsfile.75: subexpressions in the faulty RHS
+	- type.75: type declarations of all variables used in the repair space
+
+Step 1: Run MATLAB from the minthint-src directory. Add the subdirectory
+"matlab" to the MATLAB path.
+
+Step 2: Put antlr-3.5.2-complete.jar, guava-17.0.jar and minthint.jar to your
+classpath. You can find minthint.jar in the subdirectory "java".
+
+Step 3: Type the following at the matlab prompt.
+	minthint('example/v75.complete.csv', 1, 'example/attrmap.75', 'example/rhsfile.75', 'example/type.75');
+The parameters of this call are:
+	- the csv file
+	- the line number of the LHS variable in the attrmap file
+	- the attrmap file
+	- the subexpressions of faulty RHS
+	- the type declarations file
+
+Step 4: You can find the generated hints in the file "final.hints.file" in the
+top-level directory. Each line in this file records a hint and its associated
+score.
+
+
+Source
+------
+This prototype uses MATLAB for the statistical analysis and Java+Antlr for edit
+distance computation. The MATLAB sources can be found in "matlab" folder. The
+java sources are in "java/minthint-src-java.jar". Antlr is used to generate
+syntax trees of expressions and use tree edit distance for the edit distance
+computation. (See Reference [41] in the ICSE paper for details on algorithm used
+for tree edit distance). Currently, the expressions supported are over char,
+bool and int variable/arrays. Modify the antlr grammar to support more
+datatypes. There are some helper shell scripts in "shell-scripts" folder. These
+were used as a way of data flow between the matlab and java code.
+
+There could obviously be bugs in this prototype. Feel free to contact
+shalinik@csa.iisc.ernet.in in this case.
