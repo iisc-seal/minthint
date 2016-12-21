@@ -1,4 +1,11 @@
-		MintHint README
+LICENSE
+
+MintHint is available under the Apache License, version 2.0. Please see the
+LICENSE file for details.
+
+
+MintHint
+--------
 
 This directory contains the prototype implementation of MintHint. MintHint is a
 novel program repair tool. It generates repair hints for the developer, as
